@@ -1,69 +1,45 @@
-# React + TypeScript + Vite
+# 🍽️ Messelor — AI-Powered Mess Management System  
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Team:** PingPong  
+**Hackathon:** Therap BD Hackathon 2025  
 
-Currently, two official plugins are available:
+Messelor is a **web app** for bachelor messes, hostels, and shared living. It automates **meal logging, expense tracking, and monthly billing**, with **AI features** for cost forecasting, anomaly detection, reminders, and nutrition analysis.  
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## 🚀 Features  
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- 📅 Daily meal logging  
+- 🛒 Bazar expense input  
+- 💰 Automated monthly billing (PDF/CSV export)  
+- 📊 Dashboards for Admin / Manager / Member  
+- 🔐 Secure login (JWT Auth)  
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+**AI Modules:**  
+- 🤖 Smart reminders  
+- 📈 Cost forecasting  
+- ⚠️ Expense anomaly detection  
+- 🥗 Nutrition analysis  
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+---
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## 👥 Roles  
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+- **Super Admin** — System-wide control  
+- **Admin** — Manages mess, members, and managers  
+- **Manager** — Logs expenses, generates bills  
+- **Member** — Logs meals, views bills & insights  
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+---
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## 🛠️ Tech Stack  
+
+- **Frontend:** React.js, Tailwind CSS  
+- **Backend:** Spring Boot, Spring Security (JWT)  
+- **Database:** MySQL  
+- **AI:** Python  
+
+---
+
+
+
