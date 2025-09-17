@@ -1,6 +1,6 @@
 import React, { useState, type FormEvent } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 
 const Contact: React.FC = () => {
   const [name, setName] = useState<string>("");

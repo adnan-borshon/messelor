@@ -1,13 +1,13 @@
 import React from "react";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 
 
 
-import Contact from "./Contact";
-import Hero from "./HomePage/Hero";
-import Feature from "./HomePage/Feature";
-import AIBenefits from "./HomePage/AIBenefits";
-import Testimonials from "./HomePage/Testimonials";
+import Contact from "./Contact.tsx";
+import Hero from "./Hero";
+import Feature from "./Feature";
+import AIBenefits from "./AIBenefits";
+import Testimonials from "./Testimonials";
 const Home: React.FC = () => {
 
   return (

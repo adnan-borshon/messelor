@@ -4,10 +4,15 @@ import './index.css';
 
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Home from './Components/Home.tsx';
-import MainLayout from './MainLayout.tsx';
-import About from './Components/About.tsx';
-import Contact from './Components/Contact.tsx';
+import Home from './Components/HomePage/Home.tsx';
+import MainLayout from './Layout/MainLayout.tsx';
+import About from './Components/HomePage/About.tsx';
+import Contact from './Components/HomePage/Contact.tsx';
+import { LoginForm } from './Components/HomePage/login-form.tsx';
+import { SignUp } from './Components/HomePage/SignUp.tsx';
+import MemberLayout from './Layout/MemberLayout.tsx';
+import MemberDash from './Components/Member/MemberDash.tsx';
+
 
 
 
@@ -27,11 +32,29 @@ const router = createBrowserRouter([
         {
         path: "/contact",
         element: <Contact/>
+      },
+        {
+        path: "/login",
+        element: <LoginForm/>
+      },
+      {
+         path: "/signup",
+        element: <SignUp/>
       }
   
     ]
   },
-  {},
+  {
+    path: "/dashboard",
+    element: <MemberLayout/>,
+    children:[
+      {
+        path:"/dashboard",
+        element: <MemberDash/>
+      },
+   
+]
+  },
   {}
 ])
 

@@ -1,5 +1,6 @@
 import React from 'react'
 import { Button } from '../ui/button'
+import { Link } from 'react-router-dom'
 
 function Hero() {
   return (
@@ -13,7 +14,9 @@ function Hero() {
         <p className="text-lg text-gray-800">
           Automating meals, expenses and billing with intelligent insights
         </p>
-        <Button className="w-30 py-5">Get Started</Button>
+        <Link to="/login"> 
+        <Button className="w-30 py-5 cursor-pointer">Get Started</Button>
+        </Link>
       </div>
 
      

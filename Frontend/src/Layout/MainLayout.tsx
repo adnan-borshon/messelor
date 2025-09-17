@@ -1,5 +1,5 @@
 import React from 'react'
-import Navbar from '@/FixedComponents/Navbar'
+import MainNavbar from '@/FixedComponents/MainNavbar'
 import Footer from '@/FixedComponents/Footer'
 import { Outlet } from 'react-router-dom'
 
@@ -7,7 +7,7 @@ import { Outlet } from 'react-router-dom'
 function MainLayout() {
   return (
      <>
-    <Navbar />
+    <MainNavbar />
   
   <Outlet />
   
