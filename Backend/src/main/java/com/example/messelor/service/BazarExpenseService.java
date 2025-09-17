@@ -19,7 +19,7 @@ public class BazarExpenseService {
         return bazarExpenseRepository.findAll();
     }
 
-    public Optional<BazarExpense> getExpenseById(int id) {
+    public Optional<BazarExpense> getExpenseById(Integer id) {
         return bazarExpenseRepository.findById(id);
     }
 
@@ -27,7 +27,7 @@ public class BazarExpenseService {
         return bazarExpenseRepository.save(expense);
     }
 
-    public BazarExpense updateExpense(int id, BazarExpense expense) {
+    public BazarExpense updateExpense(Integer id, BazarExpense expense) {
         if (bazarExpenseRepository.existsById(id)) {
             expense.setExpense_id(id);
             return bazarExpenseRepository.save(expense);
@@ -35,7 +35,7 @@ public class BazarExpenseService {
         return null;
     }
 
-    public void deleteExpense(int id) {
+    public void deleteExpense(Integer id) {
         bazarExpenseRepository.deleteById(id);
     }
 }

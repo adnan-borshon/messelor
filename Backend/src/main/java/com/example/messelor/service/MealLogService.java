@@ -19,7 +19,7 @@ public class MealLogService {
         return mealLogRepository.findAll();
     }
 
-    public Optional<MealLog> getMealLogById(int id) {
+    public Optional<MealLog> getMealLogById(Integer id) {
         return mealLogRepository.findById(id);
     }
 
@@ -27,7 +27,7 @@ public class MealLogService {
         return mealLogRepository.save(mealLog);
     }
 
-    public MealLog updateMealLog(int id, MealLog mealLog) {
+    public MealLog updateMealLog(Integer id, MealLog mealLog) {
         if (mealLogRepository.existsById(id)) {
             mealLog.setMeal_log_id(id);
             return mealLogRepository.save(mealLog);
@@ -35,7 +35,7 @@ public class MealLogService {
         return null;
     }
 
-    public void deleteMealLog(int id) {
+    public void deleteMealLog(Integer id) {
         mealLogRepository.deleteById(id);
     }
 }
