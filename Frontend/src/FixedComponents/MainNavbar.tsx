@@ -2,17 +2,19 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/Components/ui/button"; 
 
-export default function Navbar() {
+export default function MainNavbar() {
   return (
     <div className="w-full flex items-center justify-between bg-white shadow-lg px-16 ">
       
      
       <div className="logo">
+        <Link to="/">
         <img
           className="h-16 w-40 object-contain"
           src="messelor_logo.png"
           alt="Messelor Logo"
-        />
+          />
+          </Link>
       </div>
 
       <div className="flex space-x-7">
@@ -28,8 +30,14 @@ export default function Navbar() {
       </div>
 
       <div className="flex space-x-4">
-        <Button variant="outline" className="cursor-pointer  border-2">Login</Button>
+    <Link to="/login">
+          <Button variant="outline" className="cursor-pointer border-2">
+            Login
+          </Button>
+        </Link>
+        <Link to="/signup">
         <Button className="cursor-pointer" >Signup</Button>
+        </Link>
       </div>
     </div>
   );
