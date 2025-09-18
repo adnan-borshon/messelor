@@ -13,8 +13,8 @@ const Footer: React.FC = () => {
   };
 
   return (
-    <section className="overflow-hidden bg-gray-900 mt-10 border-b-2 border-gray-600">
-      <div className="container shrink grid lg:grid-cols-4 gap-3 p-4 border-t-2">
+    <section className="overflow-hidden  bg-gray-900 mt-10 border-b-2 border-gray-600">
+      <div className="container shrink mx-auto grid lg:grid-cols-4 gap-3 p-4 border-t-2">
         {/* About */}
         <div className="flex flex-col gap-2">
           <h2 className="h2 text-white font-bold">About Messelor </h2>

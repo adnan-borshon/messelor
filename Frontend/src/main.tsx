@@ -16,6 +16,7 @@ import Role from './Components/Authentication/Role.tsx';
 import LogMeal from './Components/LogMeal.tsx';
 import Billing from './Components/Billing.tsx';
 import Community from './Components/Community.tsx';
+import ManagerDash from './Components/Manager/ManagerDash.tsx';
 
 
 
@@ -60,7 +61,11 @@ const router = createBrowserRouter([
          {
         path:"/community",
         element: <Community/>
-      }
+      },
+         {
+        path:"/manager",
+        element: <ManagerDash/>
+      },
   
     ]
   },
@@ -72,6 +77,7 @@ const router = createBrowserRouter([
         path:"/dashboard",
         element: <MemberDash userId={1} messId={1}/>
       },
+    
       
    
 ]
