@@ -18,7 +18,7 @@ import {
   Settings,
   Eye,
   Edit,
-  Trash2
+  Trash2, X
 } from 'lucide-react';
 
 // Mock data
@@ -541,24 +541,31 @@ const MemberRow: React.FC<MemberRowProps> = ({ member, onView, onEdit, onDelete 
 
 // Manage Members Component
 const ManageMembers: React.FC = () => {
-  const handleAddMember = () => alert('Add Member functionality would open here');
-  const handleView = (id: number) => alert(`View member ${id}`);
-  const handleEdit = (id: number) => alert(`Edit member ${id}`);
-  const handleDelete = (id: number) => alert(`Delete member ${id}`);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [inputValue, setInputValue] = useState("");
+
+  const handleAddMember = () => setIsModalOpen(true);
+
+  const handleSendRequest = () => {
+    alert(`Request sent to admin for: ${inputValue}`);
+    setIsModalOpen(false);
+    setInputValue("");
+  };
 
   return (
-    <ChartCard 
+    <ChartCard
       title="👥 Manage Members"
       actions={
         <button
           onClick={handleAddMember}
-          className="flex items-center gap-2 px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600"
+          className="flex items-center cursor-pointer gap-2 px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600"
         >
           <Plus className="h-4 w-4" />
           Add Member
         </button>
       }
     >
+      {/* Search Bar */}
       <div className="mb-4">
         <input
           type="text"
@@ -566,7 +573,8 @@ const ManageMembers: React.FC = () => {
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
         />
       </div>
-      
+
+      {/* Members Table */}
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead>
@@ -583,18 +591,54 @@ const ManageMembers: React.FC = () => {
               <MemberRow
                 key={member.id}
                 member={member}
-                onView={() => handleView(member.id)}
-                onEdit={() => handleEdit(member.id)}
-                onDelete={() => handleDelete(member.id)}
+                onView={() => alert(`View member ${member.id}`)}
+                onEdit={() => alert(`Edit member ${member.id}`)}
+                onDelete={() => alert(`Delete member ${member.id}`)}
               />
             ))}
           </tbody>
         </table>
       </div>
+
+      {/* Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          {/* Background Blur */}
+          <div
+            className="absolute inset-0 backdrop-blur-xs"
+            onClick={() => setIsModalOpen(false)}
+          ></div>
+
+          {/* Modal Box */}
+          <div className="relative bg-white rounded-2xl shadow-lg p-6 w-full max-w-md z-10">
+            {/* Close Button */}
+            <button
+              onClick={() => setIsModalOpen(false)}
+              className="absolute cursor-pointer top-3 right-3 text-gray-500 hover:text-gray-700"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <h2 className="text-lg font-semibold text-gray-800 mb-4">Add Member</h2>
+            <input
+              type="text"
+              placeholder="Enter username or email"
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-purple-500"
+            />
+            <button
+              onClick={handleSendRequest}
+              className="w-full cursor-pointer py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600"
+            >
+              Send Request to Admin
+            </button>
+          </div>
+        </div>
+      )}
     </ChartCard>
   );
 };
-
 // Main Component
 const ManagerDash: React.FC = () => {
   const [isExporting, setIsExporting] = useState(false);
@@ -815,8 +859,9 @@ Distribution: Stakeholders, Board of Directors
         />
         
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-2 space-y-6">
             <MealLogsChart />
+             <ManageMembers />
           </div>
           <div className="space-y-6">
             <HealthScore />
@@ -831,7 +876,7 @@ Distribution: Stakeholders, Board of Directors
           isDownloading={isDownloading}
         />
         
-        <ManageMembers />
+       
       </div>
     </div>
   );
