@@ -8,10 +8,14 @@ import Home from './Components/HomePage/Home.tsx';
 import MainLayout from './Layout/MainLayout.tsx';
 import About from './Components/HomePage/About.tsx';
 import Contact from './Components/HomePage/Contact.tsx';
-import { LoginForm } from './Components/HomePage/login-form.tsx';
-import { SignUp } from './Components/HomePage/SignUp.tsx';
+import { LoginForm } from './Components/Authentication/login-form.tsx';
+import { SignUp } from './Components/Authentication/SignUp.tsx';
 import MemberLayout from './Layout/MemberLayout.tsx';
 import MemberDash from './Components/Member/MemberDash.tsx';
+import Role from './Components/Authentication/Role.tsx';
+import LogMeal from './Components/LogMeal.tsx';
+import Billing from './Components/Billing.tsx';
+import Community from './Components/Community.tsx';
 
 
 
@@ -40,6 +44,22 @@ const router = createBrowserRouter([
       {
          path: "/signup",
         element: <SignUp/>
+      },
+        {
+         path: "/role",
+        element: <Role closeModal={() => {}}/>
+      },
+        {
+        path:"/log-meal",
+        element: <LogMeal userId={1} messId={1}/>
+      },
+          {
+        path:"/billing",
+        element: <Billing/>
+      },
+         {
+        path:"/community",
+        element: <Community/>
       }
   
     ]
@@ -50,8 +70,9 @@ const router = createBrowserRouter([
     children:[
       {
         path:"/dashboard",
-        element: <MemberDash/>
+        element: <MemberDash userId={1} messId={1}/>
       },
+      
    
 ]
   },
