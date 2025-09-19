@@ -6,6 +6,7 @@ import { cn } from '@/lib/utils';
 import React, { useState } from 'react';
 
 import Role from '@/Components/Authentication/Role.tsx';
+import { Link } from 'react-router-dom';
 
 export function SignUp({ className, ...props }: React.ComponentProps<'div'>) {
 	const [showModal, setShowModal] = useState(false);
@@ -172,9 +173,9 @@ export function SignUp({ className, ...props }: React.ComponentProps<'div'>) {
 
 			{/* Footer */}
 			<div className='text-gray-900 text-center text-xs text-balance'>
-				By clicking continue, you agree to our{' '}
-				<a href='#'>Terms of Service</a> and{' '}
-				<a href='#'>Privacy Policy</a>.
+				By clicking signup, you agree to our{' '}
+				<Link to="/terms" className='cursor-pointer hover:underline'>Terms of Service</Link> and{' '}
+				<Link to="/privacy-policy" className='cursor-pointer hover:underline'>Privacy Policy</Link>.
 			</div>
 
 			{/* Show modal if state is true */}

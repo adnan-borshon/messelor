@@ -21,6 +21,8 @@ import MessManagementDashboard from './Components/MessManagementDashboard.tsx';
 import Expenses from './Components/Manager/Expenses.tsx';
 import AdminDash from './Components/Admin/AdminDash.tsx';
 import AiInsights from './Components/AiInsights.tsx';
+import PrivacyPolicy from './Components/HomePage/PrivacyPolicy.tsx';
+import TermsOfService from './Components/HomePage/TermsOfService.tsx';
 
 
 
@@ -41,6 +43,14 @@ const router = createBrowserRouter([
         {
         path: "/contact",
         element: <Contact/>
+      },
+          {
+        path: "/terms",
+        element: <TermsOfService/>
+      },
+          {
+        path: "/privacy-policy",
+        element: <PrivacyPolicy/>
       },
         {
         path: "/login",

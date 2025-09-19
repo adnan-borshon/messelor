@@ -1,30 +1,16 @@
 import React from 'react'
 import { FaUtensils, FaMoneyBillWave, FaFileInvoiceDollar, FaChartLine } from "react-icons/fa"
+
 function Feature() {
-     const featuresData = [
-      {
-        icon: FaUtensils,
-        title: "Daily Meal Logging",
-        desc: "Simple and fast meal entry with smart tracking",
-      },
-      {
-        icon: FaMoneyBillWave,
-        title: "Smart Bazar Tracking",
-        desc: "Record expenses transparently with receipt scanning",
-      },
-      {
-        icon: FaFileInvoiceDollar,
-        title: "Automated Billing",
-        desc: "Accurate and fair monthly bills generated automatically",
-      },
-      {
-        icon: FaChartLine,
-        title: "AI Insights",
-        desc: "Cost forecasting, reminders and nutrition analysis",
-      },
-    ]
+  const featuresData = [
+    { icon: FaUtensils, title: "Daily Meal Logging", desc: "Simple and fast meal entry with smart tracking" },
+    { icon: FaMoneyBillWave, title: "Smart Bazar Tracking", desc: "Record expenses transparently with receipt scanning" },
+    { icon: FaFileInvoiceDollar, title: "Automated Billing", desc: "Accurate and fair monthly bills generated automatically" },
+    { icon: FaChartLine, title: "AI Insights", desc: "Cost forecasting, reminders and nutrition analysis" },
+  ]
+
   return (
-    <section className="features py-16">
+    <section className="features py-16 px-4">
       <div className="container mx-auto flex flex-col items-center text-center">
         <div className="mb-10">
           <h1 className="text-3xl font-bold text-blue-500">Powerful Features</h1>
