@@ -4,25 +4,25 @@ import { Link } from 'react-router-dom'
 
 function Hero() {
   return (
-    <section className="hero w-full flex bg-gray-200 py-12">
- 
-      <div className="w-1/2 flex flex-col justify-center pl-30 space-y-6">
+    <section className="hero mx-auto flex flex-col md:flex-row bg-gray-200 py-12 px-4 md:px-12 gap-8">
+      {/* left */}
+      <div className="w-full md:w-1/2 lg:pl-30 flex flex-col justify-center space-y-6">
         <div className="space-y-2">
-          <h1 className="text-4xl font-bold">Smart, Fair & AI-Powered</h1>
-          <h1 className="text-4xl text-blue-500 font-bold">Mess Management</h1>
+          <h1 className="text-3xl md:text-4xl font-bold">Smart, Fair & AI-Powered</h1>
+          <h1 className="text-3xl md:text-4xl text-blue-500 font-bold">Mess Management</h1>
         </div>
-        <p className="text-lg text-gray-800">
+        <p className="text-base md:text-lg text-gray-800">
           Automating meals, expenses and billing with intelligent insights
         </p>
         <Link to="/login"> 
-        <Button className="w-30 py-5 cursor-pointer">Get Started</Button>
+          <Button className="w-full md:w-40 py-4 cursor-pointer">Get Started</Button>
         </Link>
       </div>
 
-     
-      <div className="w-1/2 flex items-center justify-center">
+      {/* right */}
+      <div className="w-full md:w-1/2 flex items-center justify-center">
         <img
-          className="max-h-96 object-contain rounded-2xl"
+          className="max-h-72 md:max-h-96 object-contain rounded-2xl w-full md:w-auto"
           src="hero_page.jpg"
           alt="Hero"
         />

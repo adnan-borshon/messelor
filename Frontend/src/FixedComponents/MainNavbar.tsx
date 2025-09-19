@@ -4,7 +4,7 @@ import { Button } from "@/Components/ui/button";
 
 export default function MainNavbar() {
   return (
-    <div className="w-full flex items-center justify-between bg-white shadow-lg px-16 ">
+    <div className="flex items-center justify-evenly bg-white shadow-lg">
       
      
       <div className="logo">
