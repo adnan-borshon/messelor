@@ -1,3 +1,11 @@
 package com.example.backend.payload;
 
-public record LoginRequest(String usernameOrEmail, String password) {}
+import lombok.*;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class LoginRequest {
+    private String usernameOrEmail;
+    private String password;
+}

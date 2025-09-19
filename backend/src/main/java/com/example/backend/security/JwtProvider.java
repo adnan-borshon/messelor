@@ -4,16 +4,15 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-
 import jakarta.annotation.PostConstruct;
 import java.nio.charset.StandardCharsets;
-import java.security.Key;
 import java.util.Date;
+import java.util.List;
 
 @Component
 public class JwtProvider {
 
-    private Key key;
+    private byte[] keyBytes;
 
     @Value("${jwt.secret}")
     private String jwtSecret;
@@ -23,51 +22,47 @@ public class JwtProvider {
 
     @PostConstruct
     public void init() {
-        if (jwtSecret.length() < 64) {
-            jwtSecret += "0123456789012345678901234567890123456789012345678901234567890123";
-        }
-        key = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
+        keyBytes = jwtSecret.getBytes(StandardCharsets.UTF_8);
     }
 
-    public String generateToken(org.springframework.security.core.Authentication authentication) {
-        org.springframework.security.core.userdetails.User user =
-                (org.springframework.security.core.userdetails.User) authentication.getPrincipal();
-
+    // Updated to include roles in token
+    public String generateToken(String username, String userType, List<String> roles) {
         Date now = new Date();
         Date expiry = new Date(now.getTime() + expirationMs);
 
-        String roles = String.join(",", user.getAuthorities().stream().map(a -> a.getAuthority()).toList());
-
         return Jwts.builder()
-                .setSubject(user.getUsername())
-                .claim("roles", roles)
+                .setSubject(username)
+                .claim("userType", userType)
+                .claim("roles", String.join(",", roles)) // Add roles to token
                 .setIssuedAt(now)
                 .setExpiration(expiry)
-                .signWith(key, SignatureAlgorithm.HS512)
+                .signWith(Keys.hmacShaKeyFor(keyBytes))
                 .compact();
     }
 
     public boolean validateToken(String token) {
         try {
-            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+            Jwts.parserBuilder().setSigningKey(keyBytes).build().parseClaimsJws(token);
             return true;
-        } catch (JwtException | IllegalArgumentException ex) {
+        } catch (JwtException ex) {
             return false;
         }
     }
 
-    public Claims getClaimsFromToken(String token) {
-        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
-    }
-
     public String getUsernameFromToken(String token) {
-        Claims claims = getClaimsFromToken(token);
-        return claims != null ? claims.getSubject() : null;
+        Claims claims = Jwts.parserBuilder().setSigningKey(keyBytes).build().parseClaimsJws(token).getBody();
+        return claims.getSubject();
     }
 
-    public String getRolesFromToken(String token) {
-        Claims claims = getClaimsFromToken(token);
-        Object roles = claims.get("roles");
-        return roles != null ? roles.toString() : "";
+    public String getUserTypeFromToken(String token) {
+        Claims claims = Jwts.parserBuilder().setSigningKey(keyBytes).build().parseClaimsJws(token).getBody();
+        return claims.get("userType", String.class);
+    }
+
+    // New method to get roles from token
+    public List<String> getRolesFromToken(String token) {
+        Claims claims = Jwts.parserBuilder().setSigningKey(keyBytes).build().parseClaimsJws(token).getBody();
+        String rolesString = claims.get("roles", String.class);
+        return rolesString != null ? List.of(rolesString.split(",")) : List.of();
     }
 }

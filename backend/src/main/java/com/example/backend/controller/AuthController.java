@@ -1,75 +1,51 @@
 package com.example.backend.controller;
 
-import com.example.backend.model.Role;
-import com.example.backend.model.User;
-import com.example.backend.payload.JwtResponse;
-import com.example.backend.payload.LoginRequest;
-import com.example.backend.repository.RoleRepository;
-import com.example.backend.repository.UserRepository;
-import com.example.backend.security.JwtProvider;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.*;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import com.example.backend.dto.request.LoginRequest;
+import com.example.backend.dto.request.RegisterRequest;
+import com.example.backend.dto.request.SuperAdminRegisterRequest;
+import com.example.backend.dto.response.ApiResponse;
+import com.example.backend.dto.response.JwtResponse;
+import com.example.backend.service.AuthService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
+@CrossOrigin(origins = "http://localhost:3000")
+@RequiredArgsConstructor
 public class AuthController {
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Autowired
-    private JwtProvider jwtProvider;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private RoleRepository roleRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final AuthService authService;
 
     @PostMapping("/login")
-    public JwtResponse login(@RequestBody LoginRequest request) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.usernameOrEmail(), request.password())
-        );
-
-        String token = jwtProvider.generateToken(authentication);
-        User user = userRepository.findByUsername(request.usernameOrEmail())
-                .orElseThrow();
-
-        List<String> roles = user.getRoles().stream()
-                .map(Role::getRoleName)
-                .toList();
-
-        return new JwtResponse(token, user.getUsername(), roles);
+    public ResponseEntity<ApiResponse<JwtResponse>> login(@Valid @RequestBody LoginRequest request) {
+        try {
+            JwtResponse response = authService.login(request);
+            return ResponseEntity.ok(ApiResponse.success(response, "Login successful"));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ApiResponse.error("Login failed: " + e.getMessage()));
+        }
     }
 
     @PostMapping("/register")
-    public String register(@RequestBody LoginRequest request) {
-        if (userRepository.findByUsername(request.usernameOrEmail()).isPresent()
-                || userRepository.findByEmail(request.usernameOrEmail()).isPresent()) {
-            return "User already exists!";
+    public ResponseEntity<ApiResponse<String>> register(@Valid @RequestBody RegisterRequest request) {
+        try {
+            String response = authService.registerUser(request);
+            return ResponseEntity.ok(ApiResponse.success(response));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ApiResponse.error("Registration failed: " + e.getMessage()));
         }
+    }
 
-        User user = User.builder()
-                .username(request.usernameOrEmail())
-                .email(request.usernameOrEmail())
-                .password(passwordEncoder.encode(request.password()))
-                .enabled(true)
-                .build();
-
-        // Assign MEMBER role by default
-        Role role = roleRepository.findByRoleName("MEMBER").orElseThrow();
-        user.getRoles().add(role);
-
-        userRepository.save(user);
-        return "User registered successfully!";
+    @PostMapping("/superadmin/register")
+    public ResponseEntity<ApiResponse<String>> registerSuperAdmin(@Valid @RequestBody SuperAdminRegisterRequest request) {
+        try {
+            String response = authService.registerSuperAdmin(request);
+            return ResponseEntity.ok(ApiResponse.success(response));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ApiResponse.error("Super admin registration failed: " + e.getMessage()));
+        }
     }
 }

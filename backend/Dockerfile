@@ -1,33 +1,34 @@
 # Use OpenJDK 17
 FROM eclipse-temurin:17-jdk-alpine
 
-# Set working directory
 WORKDIR /app
 
-# Install bash, curl, and netcat (netcat-openbsd for Alpine)
 RUN apk add --no-cache bash curl netcat-openbsd
 
-# Copy wait-for-it.sh script
+# Copy wait-for-it
 COPY wait-for-it.sh /app/wait-for-it.sh
 RUN chmod +x /app/wait-for-it.sh
 
-# Copy Maven wrapper and config
+# Copy Maven wrapper & config
 COPY mvnw .
 COPY .mvn .mvn
 COPY pom.xml .
 
-# Copy source code
+# Copy source
 COPY src src
 
-# Build the project (skip tests for faster build)
+# Build (skip tests)
 RUN ./mvnw clean package -DskipTests
 
-# Expose application port
+# Show built files (debugging)
+RUN ls -lh target/
+
 EXPOSE 8080
 
-# Set environment variables for DB host and port (you can override in docker-compose)
-ENV DB_HOST=database
-ENV DB_PORT=5432
+# IMPORTANT: Match DB host + MySQL port
+ENV DB_HOST=mysql
+ENV DB_PORT=3306
 
-# Wait for DB to be ready, then start backend
-CMD ["/app/wait-for-it.sh", "$DB_HOST:$DB_PORT", "--", "java", "-jar", "target/backend-0.0.1-SNAPSHOT.jar"]
+# Run app with correct JAR dynamically
+CMD /app/wait-for-it.sh $DB_HOST:$DB_PORT -- \
+    java -jar target/*.jar
