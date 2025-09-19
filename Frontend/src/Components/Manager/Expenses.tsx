@@ -1026,8 +1026,8 @@ const Expenses: React.FC = () => {
   
   // Calculate stats
   const totalExpenses = expenses.reduce((sum, exp) => sum + exp.total_amount, 0);
-  const totalMealsServed = 486;
-  const costPerMeal = totalExpenses / totalMealsServed;
+  const [totalMealsServed, setTotalMealsServed] = useState(486);
+  const costPerMeal = totalMealsServed > 0 ? totalExpenses / totalMealsServed : 0;
   const monthlyBudget = 15000;
   const remainingBudget = monthlyBudget - totalExpenses;
 
@@ -1065,6 +1065,7 @@ const Expenses: React.FC = () => {
       alert('Expense deleted successfully!');
     }
   };
+
 useEffect(() => {
   if (mockExpenses.length > 0) {
     const latest = new Date(
@@ -1075,6 +1076,7 @@ useEffect(() => {
     );
   }
 }, []);
+
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-7xl mx-auto">
@@ -1087,8 +1089,8 @@ useEffect(() => {
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <StatsCard
-            title="₹12,450"
-            value="Total Expenses"
+            title="Total Expenses"
+            value={totalExpenses}
             subtitle="This month"
             trend="down"
             trendValue="2.3%↓"
@@ -1096,8 +1098,8 @@ useEffect(() => {
             icon={<DollarSign size={24} />}
           />
           <StatsCard
-            title="486"
-            value="Total Meals Served"
+            title="Total Meals Served"
+            value={totalMealsServed}
             subtitle="This month"
             trend="up"
             trendValue="1.4%↑"
@@ -1105,8 +1107,8 @@ useEffect(() => {
             icon={<ShoppingCart size={24} />}
           />
           <StatsCard
-            title="₹25.6"
-            value="Cost per Meal"
+            title="Cost per Meal"
+            value={`₹${costPerMeal.toFixed(1)}`}
             subtitle="Average cost"
             trend="neutral"
             color="purple"
