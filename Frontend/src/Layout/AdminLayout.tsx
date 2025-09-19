@@ -1,7 +1,14 @@
+import AdminNavbar from '@/Components/Admin/AdminNavbar'
+import Footer from '@/FixedComponents/Footer'
 import React from 'react'
+import { Outlet } from 'react-router-dom'
 
 export default function AdminLayout() {
   return (
-    <div>AdminLayout</div>
+    <>
+    <AdminNavbar/>
+    <Outlet/>
+    <Footer/>
+    </>
   )
 }

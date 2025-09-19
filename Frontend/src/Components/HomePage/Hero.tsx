@@ -6,7 +6,7 @@ function Hero() {
   return (
     <section className="hero mx-auto flex flex-col md:flex-row bg-gray-200 py-12 px-4 md:px-12 gap-8">
       {/* left */}
-      <div className="w-full md:w-1/2 lg:pl-30 flex flex-col justify-center space-y-6">
+      <div className="w-full md:w-1/2 lg:pl-60 flex flex-col justify-center space-y-6">
         <div className="space-y-2">
           <h1 className="text-3xl md:text-4xl font-bold">Smart, Fair & AI-Powered</h1>
           <h1 className="text-3xl md:text-4xl text-blue-500 font-bold">Mess Management</h1>
