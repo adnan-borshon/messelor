@@ -20,6 +20,7 @@ import ManagerDash from './Components/Manager/ManagerDash.tsx';
 import MessManagementDashboard from './Components/MessManagementDashboard.tsx';
 import Expenses from './Components/Manager/Expenses.tsx';
 import AdminDash from './Components/Admin/AdminDash.tsx';
+import AiInsights from './Components/AiInsights.tsx';
 
 
 
@@ -80,6 +81,10 @@ const router = createBrowserRouter([
               {
         path:"/admin-dashboard",
         element: <AdminDash/>
+      },
+                   {
+        path:"/ai-insights",
+        element: <AiInsights/>
       },
     ]
   },
