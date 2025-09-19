@@ -70,6 +70,19 @@ public class SecurityConfig {
     }
 
     @Bean
+    public org.springframework.web.cors.CorsConfigurationSource corsConfigurationSource() {
+        org.springframework.web.cors.CorsConfiguration configuration = new org.springframework.web.cors.CorsConfiguration();
+        configuration.addAllowedOrigin("http://localhost:5173"); // Frontend origin
+        configuration.addAllowedMethod("*"); // GET, POST, etc.
+        configuration.addAllowedHeader("*"); // Allow all headers
+        configuration.setAllowCredentials(true); // Allow cookies/auth headers
+
+        org.springframework.web.cors.UrlBasedCorsConfigurationSource source = new org.springframework.web.cors.UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
+
+    @Bean
     public HttpFirewall defaultFirewall() {
         return new DefaultHttpFirewall();
     }
