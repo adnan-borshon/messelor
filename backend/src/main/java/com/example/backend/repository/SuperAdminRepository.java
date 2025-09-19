@@ -1,4 +1,4 @@
 package com.example.backend.repository;
 
-public interface RoleRepository {
+public class SuperAdminRepository {
 }
