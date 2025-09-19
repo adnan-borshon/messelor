@@ -19,6 +19,7 @@ import Community from './Components/Community.tsx';
 import ManagerDash from './Components/Manager/ManagerDash.tsx';
 import MessManagementDashboard from './Components/MessManagementDashboard.tsx';
 import Expenses from './Components/Manager/Expenses.tsx';
+import AdminDash from './Components/Admin/AdminDash.tsx';
 
 
 
@@ -75,6 +76,10 @@ const router = createBrowserRouter([
            {
         path:"/expenses",
         element: <Expenses/>
+      },
+              {
+        path:"/admin-dashboard",
+        element: <AdminDash/>
       },
     ]
   },
