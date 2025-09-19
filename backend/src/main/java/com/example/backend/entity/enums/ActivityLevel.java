@@ -1,4 +1,5 @@
 package com.example.backend.entity.enums;
 
-public class ActivityLevel {
+public enum ActivityLevel {
+    SEDENTARY, LIGHT, MODERATE, ACTIVE, VERY_ACTIVE
 }

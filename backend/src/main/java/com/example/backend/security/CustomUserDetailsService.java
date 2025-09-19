@@ -1,10 +1,17 @@
 package com.example.backend.security;
 
-import com.example.backend.model.User;
+import com.example.backend.entity.Role;
+import com.example.backend.entity.SuperAdmin;
+import com.example.backend.entity.User;
+import com.example.backend.repository.SuperAdminRepository;
 import com.example.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
@@ -12,19 +19,35 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
 
-    @Override
-    public UserDetails loadUserByUsername(String usernameOrEmail) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(usernameOrEmail)
-                .orElse(userRepository.findByEmail(usernameOrEmail)
-                        .orElseThrow(() -> new UsernameNotFoundException("User not found: " + usernameOrEmail)));
+    @Autowired
+    private SuperAdminRepository superAdminRepository;
 
-        return org.springframework.security.core.userdetails.User.builder()
-                .username(user.getUsername())
-                .password(user.getPassword())
-                .disabled(!user.getEnabled())
-                .authorities(user.getRoles().stream()
-                        .map(r -> r.getRoleName()) // e.g., ROLE_MEMBER, ROLE_ADMIN
-                        .toArray(String[]::new))
-                .build();
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        // Try to find in User table first
+        User user = userRepository.findByUsernameOrEmail(username, username).orElse(null);
+        if (user != null) {
+            List<SimpleGrantedAuthority> authorities = user.getRoles().stream()
+                    .map(role -> new SimpleGrantedAuthority(role.getRoleName()))
+                    .collect(Collectors.toList());
+
+            return org.springframework.security.core.userdetails.User.builder()
+                    .username(user.getUsername())
+                    .password(user.getPassword())
+                    .authorities(authorities)
+                    .build();
+        }
+
+        // Try to find in SuperAdmin table
+        SuperAdmin superAdmin = superAdminRepository.findByUsername(username).orElse(null);
+        if (superAdmin != null && superAdmin.getIsActive()) {
+            return org.springframework.security.core.userdetails.User.builder()
+                    .username(superAdmin.getUsername())
+                    .password(superAdmin.getPassword())
+                    .authorities("SUPER_ADMIN")
+                    .build();
+        }
+
+        throw new UsernameNotFoundException("User not found: " + username);
     }
 }

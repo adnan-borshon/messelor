@@ -1,4 +1,5 @@
 package com.example.backend.entity.enums;
 
-public class Gender {
+public enum Gender {
+    MALE, FEMALE, OTHER
 }
