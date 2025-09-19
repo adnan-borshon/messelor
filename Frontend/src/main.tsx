@@ -18,6 +18,7 @@ import Billing from './Components/Billing.tsx';
 import Community from './Components/Community.tsx';
 import ManagerDash from './Components/Manager/ManagerDash.tsx';
 import MessManagementDashboard from './Components/MessManagementDashboard.tsx';
+import Expenses from './Components/Manager/Expenses.tsx';
 
 
 
@@ -70,6 +71,10 @@ const router = createBrowserRouter([
          {
         path:"/mess-management",
         element: <MessManagementDashboard/>
+      },
+           {
+        path:"/expenses",
+        element: <Expenses/>
       },
     ]
   },
