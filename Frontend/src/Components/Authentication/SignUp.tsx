@@ -10,7 +10,7 @@ import Role from "@/Components/Authentication/Role.tsx"
 export function SignUp({ className, ...props }: React.ComponentProps<"div">) {
   const [showModal, setShowModal] = useState(false)
 
-  // 🟢 Form state
+ 
   const [formData, setFormData] = useState({
     name: "",
     email: "",

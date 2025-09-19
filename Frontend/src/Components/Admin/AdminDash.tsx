@@ -16,6 +16,10 @@ import {
   BarChart3,
   UserPlus
 } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import jsPDF from 'jspdf';
+
+import {autoTable} from 'jspdf-autotable';
 
 interface User {
   user_id: number;
@@ -52,7 +56,6 @@ interface MessMember {
 // API Service
 class ApiService {
   static async getAllMesses(): Promise<Mess[]> {
-    // Simulate API call
     return [
       {
         mess_id: 1,
@@ -79,6 +82,19 @@ class ApiService {
         created_at: "2024-02-01",
         updated_at: "2024-02-01",
         is_active: true
+      },
+      {
+        mess_id: 3,
+        mess_name: "Mess Gamma",
+        mess_code: "MESS003",
+        description: "Budget-friendly mess",
+        address: "455 Oak Ave",
+        monthly_service_charge: 3500,
+        max_members: 30,
+        manager: { user_id: 3, username: "jane_smith", email: "jane@example.com", password: "" },
+        created_at: "2024-02-01",
+        updated_at: "2024-02-01",
+        is_active: true
       }
     ];
   }
@@ -92,13 +108,11 @@ class ApiService {
   }
 
   static async createMess(mess: Partial<Mess>): Promise<Mess> {
-    // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 1000));
     return { ...mess, mess_id: Date.now() } as Mess;
   }
 
   static async createUser(user: Partial<User>): Promise<User> {
-    // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 1000));
     return { ...user, user_id: Date.now() } as User;
   }
@@ -190,23 +204,20 @@ const MessOverviewCard: React.FC<{
       </div>
       
       <div className="flex gap-2">
-        <button 
-          onClick={() => onView(mess.mess_id)}
-          className="flex-1 bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition-colors"
-        >
-          View
-        </button>
-        <button 
-          onClick={() => onEdit(mess)}
-          className="bg-gray-600 text-white py-2 px-4 rounded hover:bg-gray-700 transition-colors"
-        >
-          Edit
-        </button>
-        <button 
+        <Link to="/mess-management" className="flex-1">
+          <button
+            onClick={() => onView(mess.mess_id)}
+            className="w-full cursor-pointer bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition-colors"
+          >
+            View
+          </button>
+        </Link>
+
+        <button
           onClick={() => onDelete(mess.mess_id)}
-          className="bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700 transition-colors"
+          className="flex-1 w-full cursor-pointer bg-red-600 text-white py-2 rounded hover:bg-red-700 transition-colors"
         >
-          <Trash2 className="w-4 h-4" />
+          Delete
         </button>
       </div>
     </div>
@@ -308,25 +319,45 @@ const ManagerMemberManagement: React.FC<{
     ApiService.getAllUsers().then(setUsers);
   }, []);
 
-  const mockUserData = [
+  const [mockUserData, setMockUserData] = useState([
     { user: users[0] || { user_id: 1, username: 'john_doe', email: 'john@example.com', password: '' }, role: 'Manager', mess: 'Mess Alpha', status: 'Pending' },
     { user: users[1] || { user_id: 2, username: 'sarah_wilson', email: 'sarah@example.com', password: '' }, role: 'Member', mess: 'Mess Beta', status: 'Active' }
-  ];
+  ]);
+
+  const handleApprove = (index: number) => {
+    const newData = [...mockUserData];
+    newData[index].status = 'Active';
+    setMockUserData(newData);
+  };
+
+  const handleReject = (index: number) => {
+    const newData = [...mockUserData];
+    newData[index].status = 'Rejected';
+    setMockUserData(newData);
+  };
+
+  const handleDelete = (index: number) => {
+    const newData = [...mockUserData];
+    newData.splice(index, 1);
+    setMockUserData(newData);
+  };
+
+  const handleEdit = (index: number) => {
+    const newName = prompt('Enter new username', mockUserData[index].user.username);
+    if (newName) {
+      const newData = [...mockUserData];
+      newData[index].user.username = newName;
+      setMockUserData(newData);
+    }
+  };
 
   return (
-    <div className="bg-white p-6 rounded-lg border">
+    <div className="bg-white p-6 rounded-lg border mt-6">
       <div className="flex justify-between items-center mb-4">
         <h3 className="font-semibold text-lg flex items-center">
           <Users className="w-5 h-5 mr-2" />
           Manager & Member Management
         </h3>
-        <button 
-          onClick={onAddUser}
-          className="bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 transition-colors flex items-center"
-        >
-          <UserPlus className="w-4 h-4 mr-2" />
-          Add User
-        </button>
       </div>
       
       <div className="flex gap-4 mb-4">
@@ -362,70 +393,130 @@ const ManagerMemberManagement: React.FC<{
               <th className="text-left py-2">Actions</th>
             </tr>
           </thead>
-          <tbody>
-            {mockUserData.map((item, index) => (
-              <tr key={index} className="border-b">
-                <td className="py-3">
-                  <div className="flex items-center">
-                    <div className="w-8 h-8 bg-gray-300 rounded-full mr-3"></div>
-                    <div>
-                      <div className="font-medium">{item.user.username}</div>
-                      <div className="text-sm text-gray-500">{item.user.email}</div>
-                    </div>
-                  </div>
-                </td>
-                <td className="py-3">
-                  <span className={`px-2 py-1 rounded text-xs font-medium ${item.role === 'Manager' ? 'bg-purple-100 text-purple-800' : 'bg-blue-100 text-blue-800'}`}>
-                    {item.role}
-                  </span>
-                </td>
-                <td className="py-3">{item.mess}</td>
-                <td className="py-3">
-                  <span className={`px-2 py-1 rounded text-xs font-medium ${item.status === 'Active' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
-                    {item.status}
-                  </span>
-                </td>
-                <td className="py-3">
-                  <div className="flex gap-2">
-                    <button className="text-green-600 hover:bg-green-50 p-1 rounded">
-                      <Check className="w-4 h-4" />
-                    </button>
-                    <button className="text-red-600 hover:bg-red-50 p-1 rounded">
-                      <X className="w-4 h-4" />
-                    </button>
-                    <button className="text-blue-600 hover:bg-blue-50 p-1 rounded">
-                      <Edit className="w-4 h-4" />
-                    </button>
-                    <button className="text-red-600 hover:bg-red-50 p-1 rounded">
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
+    <tbody>
+  {mockUserData.length === 0 ? (
+    <tr>
+      <td colSpan={5} className="text-center py-6 text-gray-500">
+        No pending requests
+      </td>
+    </tr>
+  ) : (
+    mockUserData.map((item, index) => (
+      <tr key={index} className="border-b">
+        <td className="py-3">
+          <div className="flex items-center">
+            <div className="w-8 h-8 bg-gray-300 rounded-full mr-3"></div>
+            <div>
+              <div className="font-medium">{item.user.username}</div>
+              <div className="text-sm text-gray-500">{item.user.email}</div>
+            </div>
+          </div>
+        </td>
+        <td className="py-3">
+          <span className={`px-2 py-1 rounded text-xs font-medium ${item.role === 'Manager' ? 'bg-purple-100 text-purple-800' : 'bg-blue-100 text-blue-800'}`}>
+            {item.role}
+          </span>
+        </td>
+        <td className="py-3">{item.mess}</td>
+        <td className="py-3">
+          <span className={`px-2 py-1 rounded text-xs font-medium ${item.status === 'Active' ? 'bg-green-100 text-green-800' : item.status === 'Rejected' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800'}`}>
+            {item.status}
+          </span>
+        </td>
+        <td className="py-3">
+          <div className="flex gap-2">
+            <button onClick={() => handleApprove(index)} className="text-green-600 hover:bg-green-50 p-1 rounded">
+              <Check className="w-4 h-4" />
+            </button>
+            <button onClick={() => handleReject(index)} className="text-red-600 hover:bg-red-50 p-1 rounded">
+              <X className="w-4 h-4" />
+            </button>
+            <button onClick={() => handleEdit(index)} className="text-blue-600 hover:bg-blue-50 p-1 rounded">
+              <Edit className="w-4 h-4" />
+            </button>
+            <button onClick={() => handleDelete(index)} className="text-red-600 hover:bg-red-50 p-1 rounded">
+              <Trash2 className="w-4 h-4" />
+            </button>
+          </div>
+        </td>
+      </tr>
+    ))
+  )}
+</tbody>
+
         </table>
       </div>
     </div>
   );
 };
-
+interface SystemReportsProps {
+  messes: Mess[];
+}
 // System Reports Component
-const SystemReports: React.FC = () => {
+const SystemReports: React.FC<SystemReportsProps> = ({ messes }) => {
+const exportMessReports = () => {
+  const doc = new jsPDF();
+  doc.text('All Mess Reports', 14, 16);
+
+  const tableColumn = ['ID', 'Name', 'Code', 'Monthly Charge', 'Max Members'];
+  const tableRows: any[] = [];
+
+  messes.forEach((mess) => {
+    tableRows.push([
+      mess.mess_id,
+      mess.mess_name,
+      mess.mess_code,
+      `₹${mess.monthly_service_charge.toLocaleString()}`,
+      mess.max_members,
+    ]);
+  });
+
+  autoTable(doc, {
+    head: [tableColumn],
+    body: tableRows,
+    startY: 20,
+  });
+
+  doc.save('MessReports.pdf');
+};
+
+
+  const exportConsolidatedAnalytics = () => {
+    const doc = new jsPDF();
+    doc.text('Consolidated Analytics', 14, 16);
+
+    // Example summary stats (replace with actual values)
+    const totalMembers = messes.reduce((sum, m) => sum + m.max_members, 0);
+    const totalExpenses = messes.reduce((sum, m) => sum + m.monthly_service_charge, 0);
+    const avgCostPerMeal = (totalExpenses / totalMembers).toFixed(2);
+
+    doc.text(`Total Members: ${totalMembers}`, 14, 30);
+    doc.text(`Total Monthly Expenses: ₹${totalExpenses.toLocaleString()}`, 14, 40);
+    doc.text(`Average Cost/Meal: ₹${avgCostPerMeal}`, 14, 50);
+
+    doc.save('ConsolidatedAnalytics.pdf');
+  };
+
   return (
     <div className="bg-white p-6 rounded-lg border">
       <h3 className="font-semibold text-lg mb-4 flex items-center">
         <BarChart3 className="w-5 h-5 mr-2" />
         System Reports
       </h3>
-      
+
       <div className="space-y-3">
-        <button className="w-full bg-blue-600 text-white py-3 px-4 rounded hover:bg-blue-700 transition-colors flex items-center justify-center">
+        <button
+          onClick={exportMessReports}
+          className="w-full bg-blue-600 text-white py-3 px-4 rounded hover:bg-blue-700 transition-colors flex items-center justify-center"
+        >
           <Download className="w-4 h-4 mr-2" />
           Export All Mess Reports
         </button>
-        
-        <button className="w-full bg-green-600 text-white py-3 px-4 rounded hover:bg-green-700 transition-colors flex items-center justify-center">
+
+        <button
+          onClick={exportConsolidatedAnalytics}
+          className="w-full bg-green-600 text-white py-3 px-4 rounded hover:bg-green-700 transition-colors flex items-center justify-center"
+        >
           <BarChart3 className="w-4 h-4 mr-2" />
           Consolidated Analytics
         </button>
@@ -433,6 +524,8 @@ const SystemReports: React.FC = () => {
     </div>
   );
 };
+
+
 
 // Add Mess Modal Component
 const AddMessModal: React.FC<{
@@ -684,6 +777,7 @@ const AdminDash: React.FC = () => {
   const [isAddMessModalOpen, setIsAddMessModalOpen] = useState(false);
   const [isAddUserModalOpen, setIsAddUserModalOpen] = useState(false);
 
+
   useEffect(() => {
     ApiService.getAllMesses().then(setMesses);
   }, []);
@@ -693,9 +787,7 @@ const AdminDash: React.FC = () => {
   };
 
   const handleViewMess = (messId: number) => {
-    // Navigate to mess management page
     console.log(`Redirecting to /mess-management/${messId}`);
-    // In a real app: navigate(`/mess-management/${messId}`);
   };
 
   const handleEditMess = (mess: Mess) => {
@@ -703,7 +795,6 @@ const AdminDash: React.FC = () => {
   };
 
   const handleDeleteMess = (messId: number) => {
-    console.log('Delete mess:', messId);
     setMesses(messes.filter(m => m.mess_id !== messId));
   };
 
@@ -724,13 +815,11 @@ const AdminDash: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Admin Dashboard</h1>
           <p className="text-gray-600">Manage all messes, members, and system-wide operations</p>
         </div>
 
-        {/* Alerts */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
           {alerts.map(alert => (
             <AlertCard
@@ -743,9 +832,7 @@ const AdminDash: React.FC = () => {
           ))}
         </div>
 
-        {/* Main Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Left Column - Mess Overview */}
           <div className="lg:col-span-2">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-xl font-semibold flex items-center">
@@ -776,19 +863,16 @@ const AdminDash: React.FC = () => {
               ))}
             </div>
 
-            {/* Manager & Member Management */}
             <ManagerMemberManagement onAddUser={() => setIsAddUserModalOpen(true)} />
           </div>
 
-          {/* Right Column - System Summary & AI Insights */}
           <div className="space-y-8">
             <SystemSummary />
             <AIInsights />
-            <SystemReports />
+            <SystemReports messes={messes}/>
           </div>
         </div>
 
-        {/* Modals */}
         <AddMessModal
           isOpen={isAddMessModalOpen}
           onClose={() => setIsAddMessModalOpen(false)}
