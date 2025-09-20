@@ -59,9 +59,9 @@ export function LoginForm({
 			
 		
 
-			console.log('Token found:', token ? 'Yes' : 'No');
-			console.log('Token type:', typeof token);
-			console.log('Token preview:', token ? token.substring(0, 50) + '...' : 'null');
+			// console.log('Token found:', token ? 'Yes' : 'No');
+			// console.log('Token type:', typeof token);
+			// console.log('Token preview:', token ? token.substring(0, 50) + '...' : 'null');
 
 			// Validate that token exists and is a string
 			if (!token || typeof token !== 'string') {
@@ -107,10 +107,10 @@ export function LoginForm({
 						navigate(`/${decoded.sub}/dashboard`);
 						break;
 					case 'ADMIN':
-						navigate(`/${decoded.sub}/admin/dashboard`);
+						navigate(`/${decoded.sub}/admin-dashboard`);
 						break;
 					case 'MANAGER':
-						navigate(`/${decoded.sub}/manager/dashboard`);
+						navigate(`/${decoded.sub}/manager-dashboard`);
 						break;
 					default:
 						console.log('Defaulting to member dashboard for role:', userRole);
