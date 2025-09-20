@@ -42,7 +42,7 @@ export function SignUp({ className, ...props }: React.ComponentProps<'div'>) {
 		// Send data to backend for registration
 		try {
 			const response = await fetch(
-				'http://localhost:8080/api/auth/register',
+				'http://ec2-34-226-55-243.compute-1.amazonaws.com:8080/api/auth/register',
 				{
 					method: 'POST',
 					headers: {
