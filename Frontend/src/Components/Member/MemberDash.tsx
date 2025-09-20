@@ -19,6 +19,7 @@ import {
   Loader
 } from 'lucide-react';
 import type { User, UserProfile, Mess, MessMember, MealLog, MealType, BazarExpense, FoodItem, MealFoodItem, MonthlyBill, NutritionalGoal, DailyNutritionSummary } from "@/lib/types"
+import { Link } from 'react-router-dom';
 
 
 interface DashboardProps {
@@ -389,9 +390,11 @@ useEffect(() => {
                 <h3 className="text-lg font-semibold">Log Meal</h3>
               </div>
               <p className="text-gray-600 text-sm mb-4">Quick meal entry with AI suggestions</p>
-              <button className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors font-medium">
+             <Link to={`/${localStorage.getItem("username")}/log-meal`}>
+              <button className="w-full cursor-pointer bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors font-medium">
                 Log Now
               </button>
+             </Link>
             </div>
 
             {/* Recent Meal Logs */}
@@ -470,9 +473,11 @@ useEffect(() => {
               <p className="text-gray-600 text-sm mb-4">
                 Current month: ₹{monthCost.toLocaleString()} | Due: {dueInDays} days
               </p>
-              <button className="w-full bg-green-600 text-white py-3 px-4 rounded-lg hover:bg-green-700 transition-colors font-medium">
+              <Link to={`/${localStorage.getItem("username")}/billing`} >
+              <button className="w-full cursor-pointer bg-green-600 text-white py-3 px-4 rounded-lg hover:bg-green-700 transition-colors font-medium">
                 View Details
               </button>
+              </Link>
             </div>
 
             {/* Health Score */}
@@ -554,9 +559,12 @@ useEffect(() => {
                 <h3 className="text-lg font-semibold">AI Insights</h3>
               </div>
               <p className="text-gray-600 text-sm mb-4">Recommendations & forecasts</p>
-              <button className="w-full bg-orange-600 text-white py-3 px-4 rounded-lg hover:bg-orange-700 transition-colors font-medium">
+             <Link to={`/${localStorage.getItem("username")}/ai-insights`}>
+             
+              <button className="w-full cursor-pointer bg-orange-600 text-white py-3 px-4 rounded-lg hover:bg-orange-700 transition-colors font-medium">
                 Explore
               </button>
+             </Link>
             </div>
 
             {/* Achievements */}

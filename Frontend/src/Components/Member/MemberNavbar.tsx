@@ -8,7 +8,7 @@ export default function MemberNavbar() {
       
      
       <div className="logo">
-        <Link to="/">
+        <Link to="/dashboard">
         <img
           className="h-16 w-40 object-contain"
           src="/messelor_logo.png"
